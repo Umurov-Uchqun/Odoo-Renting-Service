@@ -5,15 +5,20 @@ class Order(models.Model):
     _description = 'Rental Order'
 
     name = fields.Char('Order Name', required=True)
+
     customer_id = fields.Many2one('service.customer', string='Customer')
     product_id = fields.Many2one('service.product', string='Product')
+
     start_date = fields.Datetime('Start Date', required=True)
     end_date = fields.Datetime('End Date', required=True)
     returned_date = fields.Datetime('Returned Date', required=True)
+
     duration = fields.Integer('Duration',compute = '_compute_duration')
     human_readability = fields.Char('Human Readable Readability', compute='_compute_human_readability')
+
     total_price = fields.Float('Total Price', compute='_compute_total_price')
     complete_price = fields.Float('Complete Price', compute='_compute_complete_price')
+
     status = fields.Selection([
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
@@ -52,4 +57,13 @@ class Order(models.Model):
     @api.depends('start_date', 'end_date', 'product_id')
     def _compute_total_price(self):
         for order in self:
-            pass
+            hours = int(order.end_date - order.start_date).days * 24
+            total_price = self.env['product.price'].get_result_price(product_id=order.product_id.id, hours=hours)
+            order.total_price = total_price
+
+    @api.depends('start_date', 'returned_date', 'product_id')
+    def _compute_complete_price(self):
+        for order in self:
+            hours = int(order.returned_date - order.start_date).days * 24
+            complete_price = self.env['product.price'].get_result_price(product_id=order.product_id.id, hours=hours)
+            order.complete_price = complete_price
