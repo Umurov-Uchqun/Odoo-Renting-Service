@@ -1,5 +1,7 @@
 from dateutil.utils import today
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+
 
 class Product(models.Model):
     _name = 'service.product'
@@ -33,3 +35,8 @@ class Product(models.Model):
                 future_availability_date = order.today
 
 
+    @api.constrains('broken')
+    def _check_broken(self):
+        for order in self:
+            if order.broken:
+                raise ValidationError('Product is not available')
