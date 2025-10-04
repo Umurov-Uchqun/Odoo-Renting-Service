@@ -1,0 +1,5 @@
+.idea
+odoo
+venv
+__pycache__
+conf
