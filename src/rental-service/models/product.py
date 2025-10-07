@@ -8,9 +8,11 @@ class Product(models.Model):
     _description = 'Product Model'
 
     name = fields.Char('Product Name', required=True)
+
     availability = fields.Char('Product Availability', compute='_compute_availability')
     broken = fields.Boolean(default=False)
     future_availability_date = fields.Datetime('Future Availability Date', compute='_compute_future_availability')
+
     category_id = fields.Many2one("service.category", string="Category")
     rental_prices_ids = fields.One2many('product.price', 'product_id')
     orders_ids = fields.One2many('rental.order', 'product_id')
@@ -19,7 +21,7 @@ class Product(models.Model):
     @api.depends('orders_ids')
     def _compute_availability(self):
         for order in self:
-            if order.orders_status == 'confirmed':
+            if order.start_date <= today() <= order.end_date:
                 availability = 'rented'
             else:
                 availability = 'available'

@@ -1,4 +1,4 @@
-from odoo import fields, models, api
+from odoo import fields, models
 
 class Category(models.Model):
      _name = 'service.category'
