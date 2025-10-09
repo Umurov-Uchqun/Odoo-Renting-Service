@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_product_price_list" model="ir.ui.view">
+            <field name="name">product.price.list</field>
+            <field name="model">product.price</field>
+            <field name="arch" type="xml">
+                    <list>
+                        <field name="product_id"/>
+                        <field name="interval_number"/>
+                        <field name="interval_type"/>
+                        <field name="price"/>
+                    </list>
+            </field>
+        </record>
+
+
+        <record id="view_product_price_form" model="ir.ui.view">
+            <field name="name">product.price.form</field>
+            <field name="model">product.price</field>
+            <field name="arch" type="xml">
+                    <form>
+                    <sheet>
+                    <group>
+                        <field name="product_id"/>
+                        <field name="interval_number"/>
+                        <field name="interval_type"/>
+                        <field name="price"/>
+                    </group>
+                    </sheet>
+                    </form>
+            </field>
+        </record>
+
+     <record id="product_price_action" model="ir.actions.act_window">
+            <field name="name">Category</field>
+            <field name="res_model">product.price</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="view_product_price_search" model="ir.ui.view">
+            <field name="name">product.price.search</field>
+            <field name="model">product.price</field>
+            <field name="arch" type="xml">
+                <search>
+                    <group>
+                        <filter name="customer_id" string="Mahsulotlar" context="{'group_by':'product_id'}"/>
+
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <menuitem id="product_price" name="Price" action="product_price_action"/>
+
+    </data>
+</odoo>

@@ -5,4 +5,4 @@ class Category(models.Model):
      _description = 'Category Model'
 
      name = fields.Char(string='Name', required=True)
-     product_ids = fields.One2many('service.product', string='Product', required=True)
+     product_ids = fields.One2many('service.product', 'category_id', string='Product')

@@ -1,45 +1,95 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <data>
-        <record id="product_list" model="ir.ui.view">
-            <field name="name">product_list</field>
-            <field name="model">rental.product</field>
-            <field name="arch" type="xml">
-                <list>
-                    <field name="name"/>
-                    <field name="description"/>
-                </list>
-            </field>
-        </record>
+    <record id="view_service_product_list" model="ir.ui.view">
+        <field name="name">service.product.list</field>
+        <field name="model">service.product</field>
+        <field name="arch" type="xml">
+            <list string="Products" default_order="name">
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="availability"/>
+                <field name="broken"/>
+                <field name="future_availability_date"/>
+            </list>
+        </field>
+    </record>
 
-        <record id="product_form" model="ir.ui.view">
-            <field name="name">product_form</field>
-            <field name="model">rental.product</field>
+        <record id="view_service_product_form" model="ir.ui.view">
+            <field name="name">service.product.form</field>
+            <field name="model">service.product</field>
             <field name="arch" type="xml">
-                <form>
+                <form string="Product">
                     <sheet>
-                        <field name="image_1920" widget="image" class="oe_avatar" options="{'convert_to_webp': True, 'preview_image': 'image_128'}"/>
-                        <div class="oe_title">
-                            <label for="name" string="Product"/>
-                            <h1>
-                                <div class="d-flex">
-                                    <field class="text-break" name="name" options="{'line_breaks': False}" widget="text"
-                                           placeholder="e.g. Car"/>
-                                </div>
-                            </h1>
-                        </div>
                         <group>
-                            <field name="description"/>
+                            <field name="name"/>
+                            <field name="category_id"/>
                         </group>
+                        <group>
+                            <field name="availability" readonly="1"/>
+                            <field name="future_availability_date" readonly="1"/>
+                            <field name="broken"/>
+                        </group>
+                        <notebook>
+                            <page string="Rental Price">
+                                <field name="rental_price_ids">
+                                    <list editable="bottom">
+                                        <field name="product_id" invisible="1"/>
+                                        <field name="price"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Orders">
+                                <field name="orders_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="customer_id"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="status"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
         </record>
 
+        <record id="view_service_product_kanban" model="ir.ui.view">
+            <field name="name">service.product.kanban</field>
+            <field name="model">service.product</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_view">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_details">
+                                    <strong><field name="name"/></strong>
+                                    <div>
+                                        <span>Category: </span>
+                                        <field name="category_id"/>
+                                    </div>
+                                    <div>
+                                        <span>Availability: </span>
+                                        <field name="availability"/>
+                                    </div>
+                                    <div>
+                                        <span>Broken: </span>
+                                        <field name="broken"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
         <record id="product_action" model="ir.actions.act_window">
             <field name="name">Products</field>
-            <field name="res_model">rental.product</field>
-            <field name="view_mode">list,form</field>
+            <field name="res_model">service.product</field>
+            <field name="view_mode">list,form,kanban</field>
         </record>
 
         <menuitem id="product_menu" action="product_action"/>

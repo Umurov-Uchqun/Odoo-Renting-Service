@@ -10,7 +10,7 @@ class Customer(models.Model):
     name = fields.Char('Customer Name', required=True)
     phone = fields.Char('Phone Number', required=True)
     email = fields.Char('Email Address', required=True)
-    order_ids = fields.One2many('rental.order', string='Order')
+    order_ids = fields.One2many('rental.order','customer_id', string='Order')
 
 
     @api.constrains('phone')

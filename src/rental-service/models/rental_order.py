@@ -7,7 +7,7 @@ class Order(models.Model):
     name = fields.Char('Order Name', required=True)
 
     customer_id = fields.Many2one('service.customer', string='Customer')
-    product_id = fields.Many2one('service.product', string='Product')
+    product_id = fields.Many2one('service.product', string='Product', ondelete='set null')
 
     start_date = fields.Datetime('Start Date', required=True)
     end_date = fields.Datetime('End Date', required=True)
@@ -30,9 +30,11 @@ class Order(models.Model):
     def _compute_duration(self):
         for order in self:
             if order.start_date < order.end_date:
-                order.duration = order.end_date - order.start_date
+                duration = order.end_date - order.start_date
             else:
-                order.duration = 0
+                duration = 0
+
+            order.duration = duration
 
     @api.depends('duration')
     def _compute_human_readability(self):

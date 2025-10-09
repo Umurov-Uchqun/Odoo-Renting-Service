@@ -46,8 +46,6 @@
                     <templates>
                         <t t-name="card">
                             <field name="name"/>
-                            <field name="customer"/>
-                            <field name="product"/>
                             <field name="human_readability"/>
                             <field name="total_price"/>
                             <field name="status"/>

@@ -4,7 +4,7 @@ class ProductPrice(models.Model):
     _name = "product.price"
     _description = "Product Price"
 
-    product_id = fields.Many2one('service.product', string="Product")
+    product_id = fields.Many2one('service.product', string="Product", ondelete='cascade')
     interval_number = fields.Integer("Interval Number")
     interval_type = fields.Selection(
         [

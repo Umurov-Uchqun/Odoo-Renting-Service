@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_rental-service_rental-service,rental-service.rental-service,model_rental-service_rental-service,base.group_user,1,1,1,1
-access_rental-service_rental-service,rental-service.rental-service,model_rental-service_rental-service,base.group_user,1,1,1,1
+access_service_product_user,access_service_product_user,model_service_product,base.group_user,1,1,1,1
+access_service_product_manager,access_service_product_manager,model_service_product,base.group_system,1,1,1,1
+access_service_product_price,access_service_product_price,model_product_price,base.group_system,1,1,1,1
+access_service_product_order,access_service_product_order,model_rental_order,base.group_system,1,1,1,1

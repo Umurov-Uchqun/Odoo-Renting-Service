@@ -14,19 +14,19 @@ class Product(models.Model):
     future_availability_date = fields.Datetime('Future Availability Date', compute='_compute_future_availability')
 
     category_id = fields.Many2one("service.category", string="Category")
-    rental_prices_ids = fields.One2many('product.price', 'product_id')
+    rental_price_ids = fields.One2many('product.price', 'product_id')
     orders_ids = fields.One2many('rental.order', 'product_id')
 
-
-    @api.depends('orders_ids')
+    @api.depends('orders_ids.start_date', 'orders_ids.end_date')
     def _compute_availability(self):
-        for order in self:
-            if order.start_date <= today() <= order.end_date:
-                availability = 'rented'
-            else:
-                availability = 'available'
-
-            order.availability = availability
+        today = fields.Date.today()
+        for record in self:
+            orders = self.env['service.product'].search([('product_id', '=', record.id)])
+            record.is_available = True
+            for order in orders:
+                if order.start_date <= today <= order.end_date:
+                    record.is_available = False
+                    break
 
     @api.depends('orders_ids')
     def _compute_future_availability(self):
@@ -34,7 +34,9 @@ class Product(models.Model):
             if order.orders_status == 'confirmed':
                 future_availability_date = order.end_date
             else:
-                future_availability_date = order.today
+                future_availability_date = order.today()
+
+            order.future_availability_date = future_availability_date
 
 
     @api.constrains('broken')
